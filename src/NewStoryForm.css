@@ -1,0 +1,8 @@
+.hidden {
+    display: none;
+}
+
+.restart-btn {
+    display: flex;
+    margin: auto;
+}

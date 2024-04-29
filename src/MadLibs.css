@@ -1,0 +1,12 @@
+.hidden {
+    display: none;
+}
+
+.restart {
+    display: flex;
+    margin: 0 auto;
+}
+
+.app-interface {
+    display: block;
+}
