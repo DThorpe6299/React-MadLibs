@@ -1,13 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './NewStoryForm.css'
+import { STORIES } from "./constants";
 
 const NewStoryForm =({addStory, onRestart})=>{
 
-    const stories = {
-        happy: 'happy',
-        silly: 'silly',
-        surprise: 'surprise' 
-    }
+    
 
     const INITIAL_STATE = {
         noun: "",
@@ -19,25 +16,24 @@ const NewStoryForm =({addStory, onRestart})=>{
     
     const [formData, setFormData] = useState(INITIAL_STATE)
     const [formHiding, setFormHiding] = useState(false)
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true)
+
+
+    useEffect(()=>{
+        let buttonDisabled = true;
+        const isFormCompleted = Object.values(formData).every(value=>value !== "")
+        if(isFormCompleted){
+            buttonDisabled = false;
+            setIsSubmitDisabled(!isFormCompleted);
+        }
+
+    },[formData])
 
     const handleSubmit = e =>{
         e.preventDefault();
-
-        for (const value of Object.values(formData)) {
-            console.log(Object.values(formData))
-            if (value === "") {
-                alert("Please fill out all fields before getting the story.");
-                return;
-            }
-        }
-
-        if (formData.story === "") {
-            alert("Please select a story option before getting the story.");
-            return;
-        }
-        
         addStory({...formData});
         setFormHiding(true)
+        setIsSubmitDisabled(true)
     }
     
 
@@ -92,12 +88,12 @@ const NewStoryForm =({addStory, onRestart})=>{
                 <label>Story Choices
                     <select name="story" onChange={handleChange} value={formData.story}>
                     <option value='' disabled>Select a story</option>
-                    {Object.keys(stories).map(key => (
-                        <option key={stories[key]} value={stories[key]}>{key}</option>
+                    {Object.keys(STORIES).map(key => (
+                        <option key={STORIES[key]} value={STORIES[key]}>{key}</option>
                     ))}
                     </select>
                 </label>
-                <button>Get Story</button>
+                <button disabled={isSubmitDisabled} >Get Story</button>
             </form>
             <button className={`${formHiding ? 'restart-btn' : 'hidden'}`} onClick={restart}>Restart</button>
         </>
